@@ -3,9 +3,9 @@ package vaccins2;
 public class Fournisseur {
 	
 	/** 
-	 * identifient du fournisseur
+	 * identifiant du fournisseur
 	 */
-	private int identifient;
+	private int identifiant;
 	
 	/** 
 	 * nom du fournisseur
@@ -40,7 +40,7 @@ public class Fournisseur {
 	
 	/**
 	 * Constructeur
-	 * @param identifient identifient du fournisseur
+	 * @param identifiant identifiant du fournisseur
 	 * @param nom nom du fournisseur
 	 * @param pays pays du fournisseur
 	 * @param adresse adresse du fournisseur
@@ -48,10 +48,10 @@ public class Fournisseur {
 	 * @param code_postal code postal du fournisseur
 	 * @param telephone telephone du fournisseur
 	 */
-	public Fournisseur(int identifient, String nom, String pays, String adresse, String ville, String code_postal,
+	public Fournisseur(int identifiant, String nom, String pays, String adresse, String ville, String code_postal,
 			int telephone) {
 		
-		this.identifient = identifient;
+		this.identifiant = identifiant;
 		this.nom = nom;
 		this.pays = pays;
 		this.adresse = adresse;
@@ -62,11 +62,11 @@ public class Fournisseur {
 
 
 	/**
-	 * getter pour l'attribut identifient
-	 * @return valeur de l'identifient du fournisseur
+	 * getter pour l'attribut identifiant
+	 * @return valeur de l'identifiant du fournisseur
 	 */
-	public int getIdentifient() {
-		return identifient;
+	public int getIdentifiant() {
+		return identifiant;
 	}
 
 
@@ -98,7 +98,7 @@ public class Fournisseur {
 
 	/**
 	 * setter  pour l'attribut pays
-	 * @param nom :  nouvelle valeur du pays du fournisseur
+	 * @param pays :  nouvelle valeur du pays du fournisseur
 	 */
 	public void setPays(String pays) {
 		this.pays = pays;
@@ -116,7 +116,7 @@ public class Fournisseur {
 
 	/**
 	 * setter  pour l'attribut adresse
-	 * @param nom :  nouvelle valeur de l'adresse du fournisseur
+	 * @param adresse :  nouvelle valeur de l'adresse du fournisseur
 	 */
 	public void setAdresse(String adresse) {
 		this.adresse = adresse;
@@ -134,7 +134,7 @@ public class Fournisseur {
 
 	/**
 	 * setter  pour l'attribut ville
-	 * @param nom :  nouvelle valeur de la ville du fournisseur
+	 * @param ville :  nouvelle valeur de la ville du fournisseur
 	 */
 	public void setVille(String ville) {
 		this.ville = ville;
@@ -152,7 +152,7 @@ public class Fournisseur {
 
 	/**
 	 * setter  pour l'attribut code_postal
-	 * @param nom :  nouvelle valeur du code postal du fournisseur
+	 * @param code_postal :  nouvelle valeur du code postal du fournisseur
 	 */
 	public void setCode_postal(String code_postal) {
 		this.code_postal = code_postal;
@@ -170,7 +170,7 @@ public class Fournisseur {
 
 	/**
 	 * setter  pour l'attribut telephone
-	 * @param nom :  nouvelle valeur du numero de telephone du fournisseur
+	 * @param telephone :  nouvelle valeur du numero de telephone du fournisseur
 	 */
 	public void setTelephone(int telephone) {
 		this.telephone = telephone;
@@ -182,7 +182,7 @@ public class Fournisseur {
 	 */
 	@Override
 	public String toString() {
-		return "Fournisseur [identifient=" + identifient + ", nom=" + nom + ", pays=" + pays + ", adresse=" + adresse
+		return "Fournisseur [identifiant=" + identifiant + ", nom=" + nom + ", pays=" + pays + ", adresse=" + adresse
 				+ ", ville=" + ville + ", code_postal=" + code_postal + ", telephone=" + telephone + "]";
 	}
 }
