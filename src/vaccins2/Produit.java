@@ -2,7 +2,7 @@ package vaccins2;
 
 /**
  * Classe Produit
- * @version 1.0
+ * @version 1.01
  * */
 public class Produit {
 
@@ -47,6 +47,22 @@ public class Produit {
 	 */
 	public Produit(int identifiant, String nom, float prix, String type, long stock, int idFournisseur) {
 		this.identifiant = identifiant;
+		this.nom = nom;
+		this.prix = prix;
+		this.type = type;
+		this.stock = stock;
+		this.idFournisseur = idFournisseur;
+	}
+	
+	/**
+	 * Constructeur - sans identifiant
+	 * @param nom nom du produit
+	 * @param prix prix du produit
+	 * @param type type du produit
+	 * @param stock stock du produit
+	 * @param idFournisseur idantifiant du fournisseur servant a lier les vaccins a leurs fournisseurs
+	 */
+	public Produit( String nom, float prix, String type, long stock, int idFournisseur) {
 		this.nom = nom;
 		this.prix = prix;
 		this.type = type;

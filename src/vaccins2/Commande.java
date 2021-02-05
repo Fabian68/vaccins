@@ -4,7 +4,7 @@ import java.util.Date;
 
 /**
  * Classe Commande
- * @version 1.0
+ * @version 1.01
  * */
 public class Commande {
 
@@ -37,8 +37,19 @@ public class Commande {
 	 * @param idVaccin identifiant du vaccin auxquel la commande appartient
 	 */
 	public Commande(int identifiant, Date dateHeure, int nombre, int idVaccin) {
-		super();
 		this.identifiant = identifiant;
+		this.dateHeure = dateHeure;
+		this.nombre = nombre;
+		this.idVaccin = idVaccin;
+	}
+	
+	/**
+	 * Constructeur - sans identifiant
+	 * @param dateHeure date et heure de la commande
+	 * @param nombre nombre de vaccin de la commande
+	 * @param idVaccin identifiant du vaccin auxquel la commande appartient
+	 */
+	public Commande( Date dateHeure, int nombre, int idVaccin) {
 		this.dateHeure = dateHeure;
 		this.nombre = nombre;
 		this.idVaccin = idVaccin;

@@ -1,15 +1,21 @@
 package vaccins2;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Classe d'accès aux données contenues dans la table fournisseur
+ * Classe d'accès aux données contenues dans la table commande
  * @version 1.0
  * */
-public class FournisseurDAO {
-
+public class CommandeDAO {
+	
 	/**
 	 * Paramètres de connexion à la base de données oracle
 	 * URL, LOGIN et PASS sont des constantes
@@ -19,15 +25,15 @@ public class FournisseurDAO {
 	final static String PASS="";
 	
 	/** 
-	 * liste des fournisseurs connue en temps réel pour éviter de faire des requetes sans changements
+	 * liste des commandes connue en temps réel pour éviter de faire des requetes sans changements
 	 */
-	private List<Fournisseur> liste;
+	private List<Commande> liste;
 	
 	/**
 	 * Constructeur de la classe - initialise la liste
 	 * 
 	 */
-	public FournisseurDAO()
+	public CommandeDAO()
 	{
 		// chargement du pilote de bases de données
 		try {
@@ -36,16 +42,18 @@ public class FournisseurDAO {
 		} catch (ClassNotFoundException e2) {
 			System.err.println("Impossible de charger le pilote de BDD, ne pas oublier d'importer le fichier .jar dans le projet");
 		}
+		
 		update();
+
 	}
 	
 	/**
-	 * Permet d'ajouter un fournisseur dans la table fournisseur
+	 * Permet d'ajouter une commande dans la table commande
 	 * Le mode est auto-commit par défaut : chaque insertion est validée
-	 * @param nouveauFournisseur le fournisseur à ajouter
+	 * @param nouvelleCommande commande à ajouter
 	 * @return le nombre de ligne ajoutées dans la table
 	 */
-	public int ajouter(Fournisseur nouveauFournisseur)
+	public int ajouter(Commande nouvelleCommande)
 	{
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -58,13 +66,11 @@ public class FournisseurDAO {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
 			//préparation de l'instruction SQL, chaque ? représente une valeur à communiquer dans l'insertion
 			//les getters permettent de récupérer les valeurs des attributs souhaités de nouvArticle
-			ps = con.prepareStatement("INSERT INTO fournisseurs (nom, pays, adresse,ville,code_postal,telephone) VALUES ( ?, ?, ?,?,?,?)");
-			ps.setString(1,nouveauFournisseur.getNom());
-			ps.setString(2,nouveauFournisseur.getPays());
-			ps.setString(3,nouveauFournisseur.getAdresse());
-			ps.setString(4,nouveauFournisseur.getVille());
-			ps.setString(5,nouveauFournisseur.getCode_postal());
-			ps.setString(6,nouveauFournisseur.getTelephone());
+			ps = con.prepareStatement("INSERT INTO commandes (dateheure, nombre, produitNb) VALUES (?, ?,?)");
+		
+			ps.setDate(1,(Date) nouvelleCommande.getDateHeure());
+			ps.setInt(2,nouvelleCommande.getNombre());
+			ps.setInt(3,nouvelleCommande.getIdVaccin());
 
 			//Exécution de la requête
 			retour=ps.executeUpdate();
@@ -83,24 +89,24 @@ public class FournisseurDAO {
 	}
 	
 	/**
-	 * Permet de récupérer un fournisseur à partir de son identifiant
-	 * @param identifiant identifiant du fournisseur
-	 * @return un fournisseur
-	 * @return null si aucun fournisseur ne correspond a cet identifiant
+	 * Permet de récupérer une commande à partir de son identifiant
+	 * @param identifiant identifiant de la commande
+	 * @return une commande
+	 * @return null si aucune commande ne correspond a cet identifiant
 	 */
-	public Fournisseur getFournisseur(int identifiant)
+	public Commande getCommande(int identifiant)
 	{
 
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs=null;
-		Fournisseur retour=null;
+		Commande retour=null;
 
 		//connexion à la base de données
 		try {
 
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
-			ps = con.prepareStatement("SELECT * FROM fournisseurs WHERE id = ?");
+			ps = con.prepareStatement("SELECT * FROM commandes WHERE id = ?");
 			ps.setInt(1,identifiant);
 
 			//on exécute la requête
@@ -108,7 +114,7 @@ public class FournisseurDAO {
 			rs=ps.executeQuery();
 			//passe à la première (et unique) ligne retournée 
 			if(rs.next())
-				retour=new Fournisseur(rs.getInt("id"),rs.getString("nom"),rs.getString("pays"),rs.getString("adresse"),rs.getString("ville"),rs.getString("code_postal"),rs.getString("telephone"));
+				retour=new Commande(rs.getInt("id"),rs.getDate("dateheure"),rs.getInt("nombre"),rs.getInt("produitNb"));
 
 
 		} catch (Exception ee) {
@@ -124,35 +130,34 @@ public class FournisseurDAO {
 	}
 	
 	/**
-	 * Permet de récupérer tous les fournisseurs stockées dans la liste de fournisseurs
-	 * @return une ArrayList de fournisseur
+	 * Permet de récupérer toutes les commandes stockées dans la liste des commandes
+	 * @return une ArrayList de commandes
 	 */
-	public List<Fournisseur> getListeFournisseurs()
+	public List<Commande> getListeCommandes()
 	{
 		return liste;
-	
 	}
 
 	/**
-	 * Permet de mettre a jour la liste des fournisseurs avec ceux de la table fournisseur
+	 * Permet de mettre a jour la liste des commandes avec ceux stocker dans la table commande
 	 */
 	public void update() {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs=null;
-		liste=new ArrayList<Fournisseur>();
+		liste=new ArrayList<Commande>();
 
 		//connexion à la base de données
 		try {
 
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
-			ps = con.prepareStatement("SELECT * FROM fournisseurs");
+			ps = con.prepareStatement("SELECT * FROM commandes");
 
 			//on exécute la requête
 			rs=ps.executeQuery();
 			//on parcourt les lignes du résultat
 			while(rs.next())
-				liste.add(new Fournisseur(rs.getInt("id"),rs.getString("nom"),rs.getString("pays"),rs.getString("adresse"),rs.getString("ville"),rs.getString("code_postal"),rs.getString("telephone")));
+				liste.add(new Commande(rs.getInt("id"),rs.getDate("dateheure"),rs.getInt("nombre"),rs.getInt("produitNb")));
 
 
 		} catch (Exception ee) {
@@ -164,27 +169,33 @@ public class FournisseurDAO {
 			try {if (con != null)con.close();} catch (Exception t) {}
 		}
 	}
-	
 	//main permettant de tester la classe
 	public static void main(String[] args)  throws SQLException {
 
-		 FournisseurDAO fournisseurDAO=new FournisseurDAO();
+		 CommandeDAO commandeDAO=new CommandeDAO();
 		
-		 Fournisseur F = new Fournisseur("Moderna","Suisse","adresse de Moderna","Bonfol","3333","+41 71 11");
+		 Date date = new Date(0);
 		 
-		 int retour = fournisseurDAO.ajouter(F);
+		 SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		 System.out.println(formatter.format(date));
+		 
+		 Commande F = new Commande(date,100,1);
+		 
+		 int retour = commandeDAO.ajouter(F);
 		 
 		 System.out.println(retour+ " lignes ajoutées");
 		 
-		 Fournisseur F1 = fournisseurDAO.getFournisseur(1);
+		 Commande F1 = commandeDAO.getCommande(1);
 		 System.out.println(F1);
 		 System.out.println("");
 	
-		 List<Fournisseur> liste = fournisseurDAO.getListeFournisseurs();
+		 commandeDAO.update();
+		 List<Commande> liste = commandeDAO.getListeCommandes();
 		 
-		 for(Fournisseur FL : liste) {
+		 for(Commande FL : liste) {
 			 System.out.println(FL);
 		 }
 
 	}
 }
+

@@ -1,15 +1,19 @@
 package vaccins2;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Classe d'accès aux données contenues dans la table fournisseur
+ * Classe d'accès aux données contenues dans la table produit
  * @version 1.0
  * */
-public class FournisseurDAO {
-
+public class ProduitDAO {
+	
 	/**
 	 * Paramètres de connexion à la base de données oracle
 	 * URL, LOGIN et PASS sont des constantes
@@ -19,15 +23,15 @@ public class FournisseurDAO {
 	final static String PASS="";
 	
 	/** 
-	 * liste des fournisseurs connue en temps réel pour éviter de faire des requetes sans changements
+	 * liste des produits connue en temps réel pour éviter de faire des requetes sans changements
 	 */
-	private List<Fournisseur> liste;
+	private List<Produit> liste;
 	
 	/**
 	 * Constructeur de la classe - initialise la liste
 	 * 
 	 */
-	public FournisseurDAO()
+	public ProduitDAO()
 	{
 		// chargement du pilote de bases de données
 		try {
@@ -40,12 +44,12 @@ public class FournisseurDAO {
 	}
 	
 	/**
-	 * Permet d'ajouter un fournisseur dans la table fournisseur
+	 * Permet d'ajouter un produit dans la table produit
 	 * Le mode est auto-commit par défaut : chaque insertion est validée
-	 * @param nouveauFournisseur le fournisseur à ajouter
+	 * @param nouveauProduit produit à ajouter
 	 * @return le nombre de ligne ajoutées dans la table
 	 */
-	public int ajouter(Fournisseur nouveauFournisseur)
+	public int ajouter(Produit nouveauProduit)
 	{
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -58,13 +62,12 @@ public class FournisseurDAO {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
 			//préparation de l'instruction SQL, chaque ? représente une valeur à communiquer dans l'insertion
 			//les getters permettent de récupérer les valeurs des attributs souhaités de nouvArticle
-			ps = con.prepareStatement("INSERT INTO fournisseurs (nom, pays, adresse,ville,code_postal,telephone) VALUES ( ?, ?, ?,?,?,?)");
-			ps.setString(1,nouveauFournisseur.getNom());
-			ps.setString(2,nouveauFournisseur.getPays());
-			ps.setString(3,nouveauFournisseur.getAdresse());
-			ps.setString(4,nouveauFournisseur.getVille());
-			ps.setString(5,nouveauFournisseur.getCode_postal());
-			ps.setString(6,nouveauFournisseur.getTelephone());
+			ps = con.prepareStatement("INSERT INTO produits (nom, prix, type,stock,fournisseurNb) VALUES (?, ?,?,?,?)");
+			ps.setString(1,nouveauProduit.getNom());
+			ps.setFloat(2,nouveauProduit.getPrix());
+			ps.setString(3,nouveauProduit.getType());
+			ps.setLong(4,nouveauProduit.getStock());
+			ps.setInt(5,nouveauProduit.getIdFournisseur());
 
 			//Exécution de la requête
 			retour=ps.executeUpdate();
@@ -83,24 +86,24 @@ public class FournisseurDAO {
 	}
 	
 	/**
-	 * Permet de récupérer un fournisseur à partir de son identifiant
-	 * @param identifiant identifiant du fournisseur
-	 * @return un fournisseur
-	 * @return null si aucun fournisseur ne correspond a cet identifiant
+	 * Permet de récupérer un produit à partir de son identifiant
+	 * @param identifiant identifiant du produit
+	 * @return un produit
+	 * @return null si aucun produit ne correspond a cet identifiant
 	 */
-	public Fournisseur getFournisseur(int identifiant)
+	public Produit getProduit(int identifiant)
 	{
 
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs=null;
-		Fournisseur retour=null;
+		Produit retour=null;
 
 		//connexion à la base de données
 		try {
 
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
-			ps = con.prepareStatement("SELECT * FROM fournisseurs WHERE id = ?");
+			ps = con.prepareStatement("SELECT * FROM produits WHERE id = ?");
 			ps.setInt(1,identifiant);
 
 			//on exécute la requête
@@ -108,7 +111,7 @@ public class FournisseurDAO {
 			rs=ps.executeQuery();
 			//passe à la première (et unique) ligne retournée 
 			if(rs.next())
-				retour=new Fournisseur(rs.getInt("id"),rs.getString("nom"),rs.getString("pays"),rs.getString("adresse"),rs.getString("ville"),rs.getString("code_postal"),rs.getString("telephone"));
+				retour=new Produit(rs.getInt("id"),rs.getString("nom"),rs.getFloat("prix"),rs.getString("type"),rs.getLong("stock"),rs.getInt("fournisseurNb"));
 
 
 		} catch (Exception ee) {
@@ -124,35 +127,36 @@ public class FournisseurDAO {
 	}
 	
 	/**
-	 * Permet de récupérer tous les fournisseurs stockées dans la liste de fournisseurs
-	 * @return une ArrayList de fournisseur
+	 * Permet de récupérer tous les produits stockées dans la liste
+	 * @return une ArrayList de produits
 	 */
-	public List<Fournisseur> getListeFournisseurs()
+	public List<Produit> getListeProduits()
 	{
-		return liste;
-	
-	}
 
+		return liste;
+
+	}
+	
 	/**
-	 * Permet de mettre a jour la liste des fournisseurs avec ceux de la table fournisseur
+	 * Permet de mettre a jour la liste des produits avec tous les produits stockées dans la table produit
 	 */
 	public void update() {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs=null;
-		liste=new ArrayList<Fournisseur>();
+		liste=new ArrayList<Produit>();
 
 		//connexion à la base de données
 		try {
 
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
-			ps = con.prepareStatement("SELECT * FROM fournisseurs");
+			ps = con.prepareStatement("SELECT * FROM produits");
 
 			//on exécute la requête
 			rs=ps.executeQuery();
 			//on parcourt les lignes du résultat
 			while(rs.next())
-				liste.add(new Fournisseur(rs.getInt("id"),rs.getString("nom"),rs.getString("pays"),rs.getString("adresse"),rs.getString("ville"),rs.getString("code_postal"),rs.getString("telephone")));
+				liste.add(new Produit(rs.getInt("id"),rs.getString("nom"),rs.getFloat("prix"),rs.getString("type"),rs.getLong("stock"),rs.getInt("fournisseurNb")));
 
 
 		} catch (Exception ee) {
@@ -164,25 +168,25 @@ public class FournisseurDAO {
 			try {if (con != null)con.close();} catch (Exception t) {}
 		}
 	}
-	
+
 	//main permettant de tester la classe
 	public static void main(String[] args)  throws SQLException {
 
-		 FournisseurDAO fournisseurDAO=new FournisseurDAO();
+		 ProduitDAO produitDAO=new ProduitDAO();
 		
-		 Fournisseur F = new Fournisseur("Moderna","Suisse","adresse de Moderna","Bonfol","3333","+41 71 11");
+		 Produit F = new Produit("Comirnaty",2.5f,"ANRm",500000,1);
 		 
-		 int retour = fournisseurDAO.ajouter(F);
+		 int retour = produitDAO.ajouter(F);
 		 
 		 System.out.println(retour+ " lignes ajoutées");
 		 
-		 Fournisseur F1 = fournisseurDAO.getFournisseur(1);
+		 Produit F1 = produitDAO.getProduit(1);
 		 System.out.println(F1);
 		 System.out.println("");
 	
-		 List<Fournisseur> liste = fournisseurDAO.getListeFournisseurs();
+		 List<Produit> liste = produitDAO.getListeProduits();
 		 
-		 for(Fournisseur FL : liste) {
+		 for(Produit FL : liste) {
 			 System.out.println(FL);
 		 }
 
