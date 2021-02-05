@@ -2,7 +2,7 @@ package vaccins2;
 
 /**
  * Classe Fournisseur
- * @version 1.0
+ * @version 1.02
  * */
 public class Fournisseur {
 	
@@ -39,7 +39,7 @@ public class Fournisseur {
 	/** 
 	 * telephone du fournisseur
 	 */
-	private int telephone;
+	private String telephone;
 
 	
 	/**
@@ -53,9 +53,29 @@ public class Fournisseur {
 	 * @param telephone telephone du fournisseur
 	 */
 	public Fournisseur(int identifiant, String nom, String pays, String adresse, String ville, String code_postal,
-			int telephone) {
+			String telephone) {
 		
 		this.identifiant = identifiant;
+		this.nom = nom;
+		this.pays = pays;
+		this.adresse = adresse;
+		this.ville = ville;
+		this.code_postal = code_postal;
+		this.telephone = telephone;
+	}
+	
+	/**
+	 * Constructeur - identifiant pas fixee dans le programme
+	 * @param identifiant identifiant du fournisseur
+	 * @param nom nom du fournisseur
+	 * @param pays pays du fournisseur
+	 * @param adresse adresse du fournisseur
+	 * @param ville ville du fournisseur
+	 * @param code_postal code postal du fournisseur
+	 * @param telephone telephone du fournisseur
+	 */
+	public Fournisseur( String nom, String pays, String adresse, String ville, String code_postal,
+			String telephone) {
 		this.nom = nom;
 		this.pays = pays;
 		this.adresse = adresse;
@@ -167,7 +187,7 @@ public class Fournisseur {
 	 * getter pour l'attribut telephone
 	 * @return valeur du numero de telephone du fournisseur
 	 */
-	public int getTelephone() {
+	public String getTelephone() {
 		return telephone;
 	}
 
@@ -176,7 +196,7 @@ public class Fournisseur {
 	 * setter  pour l'attribut telephone
 	 * @param telephone :  nouvelle valeur du numero de telephone du fournisseur
 	 */
-	public void setTelephone(int telephone) {
+	public void setTelephone(String telephone) {
 		this.telephone = telephone;
 	}
 	
