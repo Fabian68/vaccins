@@ -2,6 +2,10 @@ package vaccins2;
 
 import java.util.Date;
 
+/**
+ * Classe Commande
+ * @version 1.0
+ * */
 public class Commande {
 
 	/** 

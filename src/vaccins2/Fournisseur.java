@@ -1,5 +1,9 @@
 package vaccins2;
 
+/**
+ * Classe Fournisseur
+ * @version 1.0
+ * */
 public class Fournisseur {
 	
 	/** 
