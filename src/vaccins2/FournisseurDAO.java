@@ -1,11 +1,12 @@
 package vaccins2;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Classe d'accès aux données contenues dans la table fournisseur
- * @version 1.1
+ * @version 1.0
  * */
 public class FournisseurDAO {
 
@@ -33,28 +34,146 @@ public class FournisseurDAO {
 
 	}
 	
+	/**
+	 * Permet d'ajouter un fournisseur dans la table fournisseur
+	 * Le mode est auto-commit par défaut : chaque insertion est validée
+	 * @param nouveauFournisseur le fournisseur à ajouter
+	 * @return le nombre de ligne ajoutées dans la table
+	 */
+	public int ajouter(Fournisseur nouveauFournisseur)
+	{
+		Connection con = null;
+		PreparedStatement ps = null;
+		int retour=0;
+
+		//connexion à la base de données
+		try {
+
+			//tentative de connexion
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			//préparation de l'instruction SQL, chaque ? représente une valeur à communiquer dans l'insertion
+			//les getters permettent de récupérer les valeurs des attributs souhaités de nouvArticle
+			ps = con.prepareStatement("INSERT INTO fournisseurs (nom, pays, adresse,ville,code_postal,telephone) VALUES ( ?, ?, ?,?,?,?)");
+			ps.setString(1,nouveauFournisseur.getNom());
+			ps.setString(2,nouveauFournisseur.getPays());
+			ps.setString(3,nouveauFournisseur.getAdresse());
+			ps.setString(4,nouveauFournisseur.getVille());
+			ps.setString(5,nouveauFournisseur.getCode_postal());
+			ps.setString(6,nouveauFournisseur.getTelephone());
+
+			//Exécution de la requête
+			retour=ps.executeUpdate();
+
+
+		} catch (Exception ee) {
+			ee.printStackTrace();
+		} finally {
+			//fermeture du preparedStatement et de la connexion
+			try {if (ps != null)ps.close();} catch (Exception t) {}
+			try {if (con != null)con.close();} catch (Exception t) {}
+		}
+		return retour;
+
+	}
+	
+	/**
+	 * Permet de récupérer un fournisseur à partir de son identifiant
+	 * @param identifiant identifiant du fournisseur
+	 * @return un fournisseur
+	 * @return null si aucun fournisseur ne correspond a cet identifiant
+	 */
+	public Fournisseur getFournisseur(int identifiant)
+	{
+
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs=null;
+		Fournisseur retour=null;
+
+		//connexion à la base de données
+		try {
+
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("SELECT * FROM fournisseurs WHERE id = ?");
+			ps.setInt(1,identifiant);
+
+			//on exécute la requête
+			//rs contient un pointeur situé jusute avant la première ligne retournée
+			rs=ps.executeQuery();
+			//passe à la première (et unique) ligne retournée 
+			if(rs.next())
+				retour=new Fournisseur(rs.getInt("id"),rs.getString("nom"),rs.getString("pays"),rs.getString("adresse"),rs.getString("ville"),rs.getString("code_postal"),rs.getString("telephone"));
+
+
+		} catch (Exception ee) {
+			ee.printStackTrace();
+		} finally {
+			//fermeture du ResultSet, du PreparedStatement et de la Connection
+			try {if (rs != null)rs.close();} catch (Exception t) {}
+			try {if (ps != null)ps.close();} catch (Exception t) {}
+			try {if (con != null)con.close();} catch (Exception t) {}
+		}
+		return retour;
+
+	}
+	
+	/**
+	 * Permet de récupérer tous les fournisseurs stockées dans la table fournisseur
+	 * @return une ArrayList de fournisseur
+	 */
+	public List<Fournisseur> getListeFournisseurs()
+	{
+
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs=null;
+		List<Fournisseur> retour=new ArrayList<Fournisseur>();
+
+		//connexion à la base de données
+		try {
+
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("SELECT * FROM fournisseurs");
+
+			//on exécute la requête
+			rs=ps.executeQuery();
+			//on parcourt les lignes du résultat
+			while(rs.next())
+				retour.add(new Fournisseur(rs.getInt("id"),rs.getString("nom"),rs.getString("pays"),rs.getString("adresse"),rs.getString("ville"),rs.getString("code_postal"),rs.getString("telephone")));
+
+
+		} catch (Exception ee) {
+			ee.printStackTrace();
+		} finally {
+			//fermeture du rs, du preparedStatement et de la connexion
+			try {if (rs != null)rs.close();} catch (Exception t) {}
+			try {if (ps != null)ps.close();} catch (Exception t) {}
+			try {if (con != null)con.close();} catch (Exception t) {}
+		}
+		return retour;
+
+	}
+
 	//main permettant de tester la classe
 	public static void main(String[] args)  throws SQLException {
 
 		 FournisseurDAO fournisseurDAO=new FournisseurDAO();
 		
-		 //test de la méthode ajouter
-		/*Article a = new Article("Set de 2 raquettes de ping-pong",149.9,10);
-		int retour=articleDAO.ajouter(a);
-
-		System.out.println(retour+ " lignes ajoutées");
-*/
-		//test de la méthode getArticle
-	/*	Article a2 = articleDAO.getArticle(1);
-		System.out.println(a2);
-*/
-		 //test de la méthode getListeArticles
-	//	List<Article> liste=articleDAO.getListeArticles();
-		//System.out.println(liste);
-	/*	for(Article art : liste)
-		{
-			System.out.println(art.toString());
-		}*/
+		 Fournisseur F = new Fournisseur("Moderna","Suisse","adresse de Moderna","Bonfol","3333","+41 71 11");
+		 
+		 int retour = fournisseurDAO.ajouter(F);
+		 
+		 System.out.println(retour+ " lignes ajoutées");
+		 
+		 Fournisseur F1 = fournisseurDAO.getFournisseur(1);
+		 System.out.println(F1);
+		 System.out.println("");
+	
+		 List<Fournisseur> liste = fournisseurDAO.getListeFournisseurs();
+		 
+		 for(Fournisseur FL : liste) {
+			 System.out.println(FL);
+		 }
 
 	}
 }
