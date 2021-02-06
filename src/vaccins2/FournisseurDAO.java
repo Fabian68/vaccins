@@ -124,6 +124,73 @@ public class FournisseurDAO {
 	}
 	
 	/**
+	 * Permet de remplacer un fournisseur par un autre dans la table à l'aide de l'identifiant, sert notamment pour la modification d'une ligne
+	 * @param f le fournisseur qui comporte les modifications par rapport a l'ancienn fournisseur
+	 */
+	public void replaceFournisseur(Fournisseur f)
+	{
+
+		Connection con = null;
+		PreparedStatement ps = null;
+
+		//connexion à la base de données
+		try {
+
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("UPDATE fournisseurs SET nom = ? , pays = ? , adresse = ? , ville = ? , code_postal = ? , telephone = ? WHERE id = ? ");
+			ps.setInt(7,f.getIdentifiant());
+			ps.setString(1,f.getNom());
+			ps.setString(2,f.getPays());
+			ps.setString(3,f.getAdresse());
+			ps.setString(4,f.getVille());
+			ps.setString(5,f.getCode_postal());
+			ps.setString(6,f.getTelephone());
+			//on met a jour 
+		
+			ps.executeUpdate();
+			
+
+		} catch (Exception ee) {
+			ee.printStackTrace();
+		} finally {
+			//fermeture du ResultSet, du PreparedStatement et de la Connection
+			try {if (ps != null)ps.close();} catch (Exception t) {}
+			try {if (con != null)con.close();} catch (Exception t) {}
+		}
+		update();
+	}
+	/**
+	 * Permet de supprimer un fournisseur à partir de son identifiant
+	 * @param identifiant identifiant de la commande
+	 */
+	public void deleteFournisseur(int identifiant)
+	{
+
+		Connection con = null;
+		PreparedStatement ps = null;
+
+		//connexion à la base de données
+		try {
+
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("DELETE FROM fournisseurs WHERE id = ?");
+			ps.setInt(1,identifiant);
+
+			//on exécute la mise a jour
+			ps.executeUpdate();
+			
+
+		} catch (Exception ee) {
+			ee.printStackTrace();
+		} finally {
+			//fermeture du ResultSet, du PreparedStatement et de la Connection
+			try {if (ps != null)ps.close();} catch (Exception t) {}
+			try {if (con != null)con.close();} catch (Exception t) {}
+		}
+		update();
+	}
+	
+	/**
 	 * Permet de récupérer tous les fournisseurs stockées dans la liste de fournisseurs
 	 * @return une ArrayList de fournisseur
 	 */
@@ -179,7 +246,9 @@ public class FournisseurDAO {
 		 Fournisseur F1 = fournisseurDAO.getFournisseur(1);
 		 System.out.println(F1);
 		 System.out.println("");
-	
+		 fournisseurDAO.deleteFournisseur(1);
+		 fournisseurDAO.getListeFournisseurs().get(1).setNom("Nouveau Nom");
+		 fournisseurDAO.replaceFournisseur( fournisseurDAO.getListeFournisseurs().get(1));
 		 List<Fournisseur> liste = fournisseurDAO.getListeFournisseurs();
 		 
 		 for(Fournisseur FL : liste) {

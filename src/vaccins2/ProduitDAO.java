@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * Classe d'accès aux données contenues dans la table produit
- * @version 1.0
+ * @version 1.01
  * */
 public class ProduitDAO {
 	
@@ -127,6 +127,71 @@ public class ProduitDAO {
 	}
 	
 	/**
+	 * Permet de remplacer un produit par un autre dans la table à l'aide de l'identifiant, sert notamment pour la modification d'une ligne
+	 * @param p le produit qui comporte les modifications par rapport a l'ancienn produit
+	 */
+	public void replaceProduit(Produit p)
+	{
+
+		Connection con = null;
+		PreparedStatement ps = null;
+		
+		//connexion à la base de données
+		try {
+
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("UPDATE produits SET nom = ? , prix = ? , type = ? , stock = ? , fournisseurNB = ? WHERE id = ? ");
+			ps.setInt(6,p.getIdentifiant());
+			ps.setString(1,p.getNom());
+			ps.setFloat(2,p.getPrix());
+			ps.setString(3,p.getType());
+			ps.setLong(4,p.getStock());
+			ps.setInt(5,p.getIdFournisseur());
+			//on exécute la mise a jour
+			ps.executeUpdate();
+		
+
+		} catch (Exception ee) {
+			ee.printStackTrace();
+		} finally {
+			//fermeture du ResultSet, du PreparedStatement et de la Connection
+			try {if (ps != null)ps.close();} catch (Exception t) {}
+			try {if (con != null)con.close();} catch (Exception t) {}
+		}
+		update();
+	}
+	/**
+	 * Permet de supprimer un produit à partir de son identifiant
+	 * @param identifiant identifiant de la commande
+	 */
+	public void deleteProduit(int identifiant)
+	{
+
+		Connection con = null;
+		PreparedStatement ps = null;
+
+		//connexion à la base de données
+		try {
+
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("DELETE FROM produits WHERE id = ?");
+			ps.setInt(1,identifiant);
+
+			//on exécute la mise a jour
+			ps.executeUpdate();
+			
+
+		} catch (Exception ee) {
+			ee.printStackTrace();
+		} finally {
+			//fermeture du ResultSet, du PreparedStatement et de la Connection
+			try {if (ps != null)ps.close();} catch (Exception t) {}
+			try {if (con != null)con.close();} catch (Exception t) {}
+		}
+		update();
+	}
+	
+	/**
 	 * Permet de récupérer tous les produits stockées dans la liste
 	 * @return une ArrayList de produits
 	 */
@@ -183,6 +248,9 @@ public class ProduitDAO {
 		 Produit F1 = produitDAO.getProduit(1);
 		 System.out.println(F1);
 		 System.out.println("");
+		 produitDAO.deleteProduit(1);
+		 produitDAO.getListeProduits().get(1).setNom("Nouveau Nom");
+		 produitDAO.replaceProduit( produitDAO.getListeProduits().get(1));
 	
 		 List<Produit> liste = produitDAO.getListeProduits();
 		 

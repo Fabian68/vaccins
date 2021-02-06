@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * Classe d'accès aux données contenues dans la table commande
- * @version 1.0
+ * @version 1.01
  * */
 public class CommandeDAO {
 	
@@ -130,6 +130,71 @@ public class CommandeDAO {
 	}
 	
 	/**
+	 * Permet de remplacer une commande par une autre dans la table à l'aide de l'identifiant, sert notamment pour la modification d'une ligne
+	 * @param c la commande qui comporte les modifications par rapport a l'ancienne commande
+	 */
+	public void replaceCommande( Commande c)
+	{
+
+		Connection con = null;
+		PreparedStatement ps = null;
+
+		//connexion à la base de données
+		try {
+
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("UPDATE commandes SET dateheure = ? , nombre = ? , produitNb = ?  WHERE id = ?");
+			ps.setInt(4,c.getIdentifiant());
+			ps.setDate(1,(Date) c.getDateHeure());
+			ps.setInt(2,c.getNombre());
+			ps.setInt(3,c.getIdVaccin());
+			//on exécute la mise a jour
+			ps.executeUpdate();
+		
+
+		} catch (Exception ee) {
+			ee.printStackTrace();
+		} finally {
+			//fermeture du ResultSet, du PreparedStatement et de la Connection
+			try {if (ps != null)ps.close();} catch (Exception t) {}
+			try {if (con != null)con.close();} catch (Exception t) {}
+		}
+		update();
+	}
+	
+	/**
+	 * Permet de supprimer une commande à partir de son identifiant
+	 * @param identifiant identifiant de la commande
+	 */
+	public void deleteCommande(int identifiant)
+	{
+
+		Connection con = null;
+		PreparedStatement ps = null;
+
+		//connexion à la base de données
+		try {
+
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("DELETE FROM commandes WHERE id = ?");
+			ps.setInt(1,identifiant);
+
+			//on exécute la mise a jour
+			ps.executeUpdate();
+			
+
+		} catch (Exception ee) {
+			ee.printStackTrace();
+		} finally {
+			//fermeture du ResultSet, du PreparedStatement et de la Connection
+			try {if (ps != null)ps.close();} catch (Exception t) {}
+			try {if (con != null)con.close();} catch (Exception t) {}
+		}
+		update();
+	}
+	
+	
+	/**
 	 * Permet de récupérer toutes les commandes stockées dans la liste des commandes
 	 * @return une ArrayList de commandes
 	 */
@@ -189,7 +254,10 @@ public class CommandeDAO {
 		 System.out.println(F1);
 		 System.out.println("");
 	
-		 commandeDAO.update();
+		 commandeDAO.deleteCommande(1);
+		 commandeDAO.getListeCommandes().get(1).setNombre(555);
+		 commandeDAO.replaceCommande( commandeDAO.getListeCommandes().get(1));
+		 
 		 List<Commande> liste = commandeDAO.getListeCommandes();
 		 
 		 for(Commande FL : liste) {
