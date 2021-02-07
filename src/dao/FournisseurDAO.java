@@ -1,8 +1,10 @@
-package vaccins2;
+package dao;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import model.Fournisseur;
 
 /**
  * Classe d'accès aux données contenues dans la table fournisseur

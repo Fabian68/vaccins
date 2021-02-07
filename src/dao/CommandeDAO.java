@@ -1,4 +1,4 @@
-package vaccins2;
+package dao;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -9,6 +9,9 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import model.Commande;
+import model.Produit;
 
 /**
  * Classe d'accès aux données contenues dans la table commande

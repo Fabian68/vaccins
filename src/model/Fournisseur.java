@@ -1,4 +1,4 @@
-package vaccins2;
+package model;
 
 /**
  * Classe Fournisseur
