@@ -2,7 +2,7 @@ package vaccins2;
 
 /**
  * Classe Produit
- * @version 1.01
+ * @version 1.02
  * */
 public class Produit {
 
@@ -141,6 +141,14 @@ public class Produit {
 	 */
 	public void setStock(long stock) {
 		this.stock = stock;
+	}
+	
+	/**
+	 * fonction pour ajouter du stock
+	 * @param montant :  montant a ajouter
+	 */
+	public void addStock(long montant) {
+		this.stock += montant;
 	}
 
 	/**

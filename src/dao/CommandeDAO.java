@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * Classe d'accès aux données contenues dans la table commande
- * @version 1.01
+ * @version 1.02
  * */
 public class CommandeDAO {
 	
@@ -75,6 +75,11 @@ public class CommandeDAO {
 			//Exécution de la requête
 			retour=ps.executeUpdate();
 
+			//augmentation du stock du vaccin commander
+			ProduitDAO produitDAO = new ProduitDAO();
+			Produit p = produitDAO.getProduit(nouvelleCommande.getIdVaccin());
+			p.addStock(nouvelleCommande.getNombre());
+			produitDAO.replaceProduit(p);
 
 		} catch (Exception ee) {
 			ee.printStackTrace();
@@ -244,7 +249,7 @@ public class CommandeDAO {
 		 SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		 System.out.println(formatter.format(date));
 		 
-		 Commande F = new Commande(date,100,1);
+		 Commande F = new Commande(date,100,2);
 		 
 		 int retour = commandeDAO.ajouter(F);
 		 

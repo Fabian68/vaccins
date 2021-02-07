@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * Classe d'accès aux données contenues dans la table produit
- * @version 1.01
+ * @version 1.02
  * */
 public class ProduitDAO {
 	
