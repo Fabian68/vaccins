@@ -1,5 +1,3 @@
-
-
 --
 -- Base de données : `gestionvaccin`
 --
@@ -21,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `commandes` (
   `produitNb` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_commande` (`produitNb`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -39,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `fournisseurs` (
   `code_postal` varchar(5) DEFAULT NULL,
   `telephone` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -57,4 +55,4 @@ CREATE TABLE IF NOT EXISTS `produits` (
   `fournisseurNb` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_Produits` (`fournisseurNb`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -181,7 +181,6 @@ public class Interface extends JFrame implements ActionListener{
 		panelTableProduit = new JPanel();
 		panelTableProduit.setLayout( new GridLayout());
 		panelTableProduit.setBounds( 350, 10, 600, 500);
-		panelTableProduit.setBorder(BorderFactory.createDashedBorder( Color.blue));
 		
 		modelTableProduit = new DefaultTableModel();
 		tableProduit = new JTable( modelTableProduit);
@@ -236,7 +235,7 @@ public class Interface extends JFrame implements ActionListener{
 		
 		//Labels
 		nomFournisseurLabel = new JLabel("Nom du fournisseur: ");
-		nomFournisseurLabel.setBounds( 20, 50, 100, 30);
+		nomFournisseurLabel.setBounds( 20, 50, 200, 30);
 		adresseLabel = new JLabel("Adresse: ");
 		adresseLabel.setBounds( 20, 85, 100, 30);
 		codePostalLabel = new JLabel("Code Postal: ");
@@ -276,7 +275,6 @@ public class Interface extends JFrame implements ActionListener{
 		panelTableFournisseur = new JPanel();
 		panelTableFournisseur.setLayout( new GridLayout());
 		panelTableFournisseur.setBounds( 350, 10, 600, 500);
-		panelTableFournisseur.setBorder(BorderFactory.createDashedBorder( Color.blue));
 				
 		modelTableFournisseur = new DefaultTableModel();
 		tableFournisseur = new JTable( modelTableFournisseur);
@@ -362,7 +360,6 @@ public class Interface extends JFrame implements ActionListener{
 		panelTableCommande = new JPanel();
 		panelTableCommande.setLayout( new GridLayout());
 		panelTableCommande.setBounds( 350, 10, 600, 500);
-		panelTableCommande.setBorder(BorderFactory.createDashedBorder( Color.blue));
 				
 		modelTableCommande = new DefaultTableModel();
 		tableCommande = new JTable( modelTableCommande);
@@ -411,7 +408,7 @@ public class Interface extends JFrame implements ActionListener{
 		onglets.add( "Fournisseurs", fournisseur);
 		onglets.add( "Commandes", commande);
 		
-		//ajout des onglets dans la fenêtre
+		//Ajout des onglets dans la fenêtre
 		add( onglets);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -606,7 +603,9 @@ public class Interface extends JFrame implements ActionListener{
 					}else {
 						Commande commandeAjoute = new Commande( nextIdCommande, new Date( System.currentTimeMillis()), Integer.valueOf( quantiteField.getText()), idProduit);
 						commandes.ajouter(commandeAjoute);
+						produits.update();
 						resetTableCommande();
+						resetTableProduit();
 						labelErreurFournisseur.setText("");
 					}
 				}catch(NumberFormatException exception) {
@@ -629,6 +628,7 @@ public class Interface extends JFrame implements ActionListener{
 					}else {
 						Commande commandeModifie = new Commande( idSelectedCommande, commandeSelected.getDateHeure(), Integer.valueOf( quantiteField.getText()), produitSelected.getIdentifiant());
 						commandes.replaceCommande(commandeModifie);
+						produits.update();
 						resetTableCommande();
 						resetTableProduit();
 						labelErreurCommande.setText("");
