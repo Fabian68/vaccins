@@ -99,8 +99,7 @@ public class CommandeDAO {
 	/**
 	 * Permet de récupérer une commande à partir de son identifiant
 	 * @param identifiant identifiant de la commande
-	 * @return une commande
-	 * @return null si aucune commande ne correspond a cet identifiant
+	 * @return une commande ou null s'il n'y aucune commande
 	 */
 	public Commande getCommande(int identifiant)
 	{

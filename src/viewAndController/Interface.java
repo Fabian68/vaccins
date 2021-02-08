@@ -651,7 +651,7 @@ public class Interface extends JFrame implements ActionListener{
 	/**
 	 * Fonction main. 
 	 * Initialise l'interface.
-	 * @param args
+	 * @param args argument
 	 */
 	public static void main(String[] args) { 
 		new Interface(); 

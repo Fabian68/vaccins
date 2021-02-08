@@ -66,7 +66,6 @@ public class Fournisseur {
 	
 	/**
 	 * Constructeur - identifiant pas fixee dans le programme
-	 * @param identifiant identifiant du fournisseur
 	 * @param nom nom du fournisseur
 	 * @param pays pays du fournisseur
 	 * @param adresse adresse du fournisseur

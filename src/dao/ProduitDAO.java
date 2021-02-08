@@ -90,8 +90,7 @@ public class ProduitDAO {
 	/**
 	 * Permet de récupérer un produit à partir de son identifiant
 	 * @param identifiant identifiant du produit
-	 * @return un produit
-	 * @return null si aucun produit ne correspond a cet identifiant
+	 * @return un produit ou null s'il n'y aucun produit
 	 */
 	public Produit getProduit(int identifiant)
 	{

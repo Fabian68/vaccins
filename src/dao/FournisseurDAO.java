@@ -87,8 +87,7 @@ public class FournisseurDAO {
 	/**
 	 * Permet de récupérer un fournisseur à partir de son identifiant
 	 * @param identifiant identifiant du fournisseur
-	 * @return un fournisseur
-	 * @return null si aucun fournisseur ne correspond a cet identifiant
+	 * @return un fournisseur ou null s'il n'y aucun fournisseur
 	 */
 	public Fournisseur getFournisseur(int identifiant)
 	{
