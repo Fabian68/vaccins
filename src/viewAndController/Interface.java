@@ -60,6 +60,7 @@ public class Interface extends JFrame implements ActionListener{
 	 * modelTableProduit
 	 * panelTableProduit
 	 * scrollProduit
+	 * labelErreurProduit
 	 */
 	private JLabel nomProduitLabel, prixProduitLabel, nomFournisseurProduitLabel, typeProduitLabel;
 	private JTextField nomProduitField, prixProduitField, nomFournisseurProduitField, typeProduitField;
@@ -72,13 +73,14 @@ public class Interface extends JFrame implements ActionListener{
 	
 	/**
 	 * les attributs graphique de l'onglet fournisseur:
-	 * nomFournisseurLabel, adresseLabel, codePostalLabel, villeLabel, telLabel;
-	 * nomFournisseurField, adresseField, codePostalField, villeField, telField;
-	 * modifierFournisseur, ajouterFournisseur, supprimerFournisseur;
-	 * tableFournisseur;
-	 * modelTableFournisseur;
-	 * panelTableFournisseur;
-	 * scrollFournisseur;
+	 * nomFournisseurLabel, adresseLabel, codePostalLabel, villeLabel, telLabel
+	 * nomFournisseurField, adresseField, codePostalField, villeField, telField
+	 * modifierFournisseur, ajouterFournisseur, supprimerFournisseur
+	 * tableFournisseur
+	 * modelTableFournisseur
+	 * panelTableFournisseur
+	 * scrollFournisseur
+	 * labelErreurFournisseur
 	 */
 	private JLabel nomFournisseurLabel, adresseLabel, codePostalLabel, villeLabel, telLabel;
 	private JTextField nomFournisseurField, adresseField, codePostalField, villeField, telField;
@@ -98,6 +100,7 @@ public class Interface extends JFrame implements ActionListener{
 	 * modelTableCommande
 	 * panelTableCommande
 	 * scrollCommande
+	 * labelErreurCommande
 	 */
 	private JLabel nomProduitCommandeLabel, quantiteLabel;
 	private JTextField nomProduitCommandeField, quantiteField;
