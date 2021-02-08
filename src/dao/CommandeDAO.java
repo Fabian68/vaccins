@@ -71,7 +71,7 @@ public class CommandeDAO {
 			//les getters permettent de récupérer les valeurs des attributs souhaités de nouvArticle
 			ps = con.prepareStatement("INSERT INTO commandes (dateheure, nombre, produitNb) VALUES (?, ?,?)");
 		
-			ps.setDate(1,(Date) nouvelleCommande.getDateHeure());
+			ps.setDate(1,new Date(nouvelleCommande.getDateHeure().getTime()));
 			ps.setInt(2,nouvelleCommande.getNombre());
 			ps.setInt(3,nouvelleCommande.getIdVaccin());
 
@@ -153,7 +153,7 @@ public class CommandeDAO {
 			con = DriverManager.getConnection(URL, LOGIN, PASS);
 			ps = con.prepareStatement("UPDATE commandes SET dateheure = ? , nombre = ? , produitNb = ?  WHERE id = ?");
 			ps.setInt(4,c.getIdentifiant());
-			ps.setDate(1,(Date) c.getDateHeure());
+			ps.setDate(1, new Date( c.getDateHeure().getTime()));
 			ps.setInt(2,c.getNombre());
 			ps.setInt(3,c.getIdVaccin());
 			//on exécute la mise a jour

@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.List;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -14,26 +15,52 @@ import javax.swing.table.DefaultTableModel;
 import dao.CommandeDAO;
 import dao.FournisseurDAO;
 import dao.ProduitDAO;
+import model.Commande;
 import model.Fournisseur;
 import model.Produit;
 
+
+/**
+ * 
+ * @author Alban Spindler
+ * Classe main qui crééz toute l'interface
+ */
 public class Interface extends JFrame implements ActionListener{
 	
-	// Les données
+	/**
+	 * 	Le stockage de donnée: ProduitDAO, CommandeDAO et FournisseurDAO
+	 */
 	private ProduitDAO produits;
 	private CommandeDAO commandes;
 	private FournisseurDAO fournisseurs;
 	
-	//Les attributs des données
+	/**
+	 * Les ids de certaines données dont on a besoin dans le code:
+	 * nextIdProduit, idSelectedProduit
+	 * nextIdFournisseur, idSelectedFournisseur
+	 * nextIdCommande, idSelectedCommande
+	 */
 	private int nextIdProduit, idSelectedProduit;
 	private int nextIdFournisseur, idSelectedFournisseur;
 	private int nextIdCommande, idSelectedCommande;
 	
-	// Les 3 onglets et leur conteneur
+	/**
+	 * Le conteneur d'onglet: onglet
+	 * Les onglets: produit, commande et fournisseur
+	 */
 	private JTabbedPane onglets;
 	private JPanel produit, commande, fournisseur;
 	
-	// les attributs graphique de l'onglet produit
+	/**
+	 * Tous les attributs graphiques de l'onglet produit:
+	 * nomProduitLabel, prixProduitLabel, nomFournisseurProduitLabel, typeProduitLabel
+	 * nomProduitField, prixProduitField, nomFournisseurProduitField, typeProduitField
+	 * modifierProduit, ajouterProduit, supprimerProduit
+	 * tableProduit
+	 * modelTableProduit
+	 * panelTableProduit
+	 * scrollProduit
+	 */
 	private JLabel nomProduitLabel, prixProduitLabel, nomFournisseurProduitLabel, typeProduitLabel;
 	private JTextField nomProduitField, prixProduitField, nomFournisseurProduitField, typeProduitField;
 	private JButton modifierProduit, ajouterProduit, supprimerProduit;
@@ -41,8 +68,18 @@ public class Interface extends JFrame implements ActionListener{
 	private DefaultTableModel modelTableProduit;
 	private JPanel panelTableProduit;
 	private JScrollPane scrollProduit;
+	private JLabel labelErreurProduit;
 	
-	// les attributs graphique de l'onglet fournisseur
+	/**
+	 * les attributs graphique de l'onglet fournisseur:
+	 * nomFournisseurLabel, adresseLabel, codePostalLabel, villeLabel, telLabel;
+	 * nomFournisseurField, adresseField, codePostalField, villeField, telField;
+	 * modifierFournisseur, ajouterFournisseur, supprimerFournisseur;
+	 * tableFournisseur;
+	 * modelTableFournisseur;
+	 * panelTableFournisseur;
+	 * scrollFournisseur;
+	 */
 	private JLabel nomFournisseurLabel, adresseLabel, codePostalLabel, villeLabel, telLabel;
 	private JTextField nomFournisseurField, adresseField, codePostalField, villeField, telField;
 	private JButton modifierFournisseur, ajouterFournisseur, supprimerFournisseur;
@@ -50,8 +87,18 @@ public class Interface extends JFrame implements ActionListener{
 	private DefaultTableModel modelTableFournisseur;
 	private JPanel panelTableFournisseur;
 	private JScrollPane scrollFournisseur;
+	private JLabel labelErreurFournisseur;
 	
-	// les attributs graphique de l'onglet Commande
+	/**
+	 * les attributs graphique de l'onglet Commande:
+	 * nomProduitCommandeLabel, quantiteLabel
+	 * nomProduitCommandeField, quantiteField
+	 * modifierCommande, ajouterCommande, supprimerCommande
+	 * tableCommande
+	 * modelTableCommande
+	 * panelTableCommande
+	 * scrollCommande
+	 */
 	private JLabel nomProduitCommandeLabel, quantiteLabel;
 	private JTextField nomProduitCommandeField, quantiteField;
 	private JButton modifierCommande, ajouterCommande, supprimerCommande;
@@ -59,10 +106,13 @@ public class Interface extends JFrame implements ActionListener{
 	private DefaultTableModel modelTableCommande;
 	private JPanel panelTableCommande;
 	private JScrollPane scrollCommande;
+	private JLabel labelErreurCommande;
 	
-	// Le label qui affiche une erreur si besoin
-	private JLabel labelErreur;
-	
+	/**
+	 * Constructeur: 
+	 * créé toute la partie graphique.
+	 * Divisé en trois partie majeure: création de l'onglet produit, création de l'onglet fournisseur et enfin création de l'onglet commande
+	 */
 	public Interface() {
 		produits = new ProduitDAO();
 		commandes = new CommandeDAO();
@@ -87,9 +137,6 @@ public class Interface extends JFrame implements ActionListener{
 		commande.setLayout(null);
 		fournisseur = new JPanel();
 		fournisseur.setLayout(null);
-		labelErreur = new JLabel("");
-		labelErreur.setBounds( 20, 20, 300, 30);
-		labelErreur.setForeground(new Color(255,0,0));
 		
 		//Initialisation onglet produit
 		
@@ -102,6 +149,9 @@ public class Interface extends JFrame implements ActionListener{
 		nomFournisseurProduitLabel.setBounds( 20, 120, 120, 30);
 		typeProduitLabel = new JLabel("Type : ");
 		typeProduitLabel.setBounds( 20, 155, 120, 30);
+		labelErreurProduit = new JLabel("");
+		labelErreurProduit.setBounds( 10, 20, 400, 30);
+		labelErreurProduit.setForeground(new Color(255,0,0));
 		
 		//Fields
 		nomProduitField = new JTextField();
@@ -177,7 +227,7 @@ public class Interface extends JFrame implements ActionListener{
 		produit.add( ajouterProduit);
 		produit.add( supprimerProduit);
 		produit.add( panelTableProduit);
-		produit.add(labelErreur);
+		produit.add(labelErreurProduit);
 		
 		//Initialisation onglet fournisseur
 		
@@ -192,6 +242,9 @@ public class Interface extends JFrame implements ActionListener{
 		villeLabel.setBounds( 20, 155, 120, 30);
 		telLabel = new JLabel("Téléphone : ");
 		telLabel.setBounds( 20, 190, 120, 30);
+		labelErreurFournisseur = new JLabel("");
+		labelErreurFournisseur.setBounds( 10, 20, 400, 30);
+		labelErreurFournisseur.setForeground(new Color(255,0,0));
 				
 		//Fields
 		nomFournisseurField = new JTextField();
@@ -272,12 +325,83 @@ public class Interface extends JFrame implements ActionListener{
 		fournisseur.add( ajouterFournisseur);
 		fournisseur.add( supprimerFournisseur);
 		fournisseur.add( panelTableFournisseur);
-		fournisseur.add(labelErreur);
+		fournisseur.add(labelErreurFournisseur);
 		
 		//Initialisation onglet commande
 		
-		
-		
+		//Labels
+		nomProduitCommandeLabel = new JLabel("Nom du produit: ");
+		nomProduitCommandeLabel.setBounds( 20, 50, 100, 30);
+		quantiteLabel = new JLabel("Quantite: ");
+		quantiteLabel.setBounds( 20, 85, 100, 30);
+		labelErreurCommande = new JLabel("");
+		labelErreurCommande.setBounds( 10, 20, 400, 30);
+		labelErreurCommande.setForeground(new Color(255,0,0));
+				
+		//Fields
+		nomProduitCommandeField = new JTextField();
+		nomProduitCommandeField.setBounds( 150, 50, 150, 30);
+		quantiteField = new JTextField();
+		quantiteField.setBounds( 150, 85, 150, 30);
+				
+		//Boutons
+		modifierCommande = new JButton("Modifier");
+		modifierCommande.setBounds( 10, 150, 100, 30);
+		modifierCommande.addActionListener(this);
+		ajouterCommande = new JButton("Ajouter");
+		ajouterCommande.setBounds( 115, 150, 100, 30);
+		ajouterCommande.addActionListener(this);
+		supprimerCommande = new JButton("Supprimer");
+		supprimerCommande.setBounds( 220, 150, 100, 30);
+		supprimerCommande.addActionListener(this);
+				
+		//table
+		panelTableCommande = new JPanel();
+		panelTableCommande.setLayout( new GridLayout());
+		panelTableCommande.setBounds( 350, 10, 600, 500);
+		panelTableCommande.setBorder(BorderFactory.createDashedBorder( Color.blue));
+				
+		modelTableCommande = new DefaultTableModel();
+		tableCommande = new JTable( modelTableCommande);
+		tableCommande.setEnabled(true);
+		tf = new JTextField();
+		tf.setEditable(false);
+		editor = new DefaultCellEditor(tf);
+		tableCommande.setDefaultEditor(Object.class, editor);
+				
+		modelTableCommande.addColumn("Id");
+		modelTableCommande.addColumn("Nom du Produit");
+		modelTableCommande.addColumn("Date");
+		modelTableCommande.addColumn("Quantite");
+		modelTableCommande.addColumn("Prix à l'unité");
+				
+		scrollCommande = new JScrollPane( tableCommande, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		panelTableCommande.add(scrollCommande);
+				
+		//Listener pour le click d'une ligne
+		tableCommande.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+	        public void valueChanged(ListSelectionEvent event) {
+			       if( tableCommande.getSelectedRow() != -1) {
+				          idSelectedCommande = Integer.valueOf( (String)tableCommande.getValueAt(tableCommande.getSelectedRow(), 0));
+				          nomProduitCommandeField.setText((String)tableCommande.getValueAt(tableCommande.getSelectedRow(), 1));
+				          quantiteField.setText((String)tableCommande.getValueAt(tableCommande.getSelectedRow(), 3));
+			       }
+			 }
+	    });
+				
+		//Ajoute les lignes des produits
+		resetTableCommande();
+				
+		//Ajout de tous les éléments dans l'onglet produit
+		commande.add( nomProduitCommandeLabel);
+		commande.add( quantiteLabel);
+		commande.add( nomProduitCommandeField);
+		commande.add( quantiteField);
+		commande.add( modifierCommande);
+		commande.add( ajouterCommande);
+		commande.add( supprimerCommande);
+		commande.add( panelTableCommande);
+		commande.add(labelErreurCommande);
 		
 		//Ajout des pannels en tant qu'onglets
 		onglets.add( "Produits", produit);
@@ -291,9 +415,13 @@ public class Interface extends JFrame implements ActionListener{
 		setVisible(true);
 	}
 	
+	
+	/**
+	 * Permet de réafficher le tableau des produits
+	 */
 	public void resetTableProduit(){
 		tableProduit.clearSelection();
-		idSelectedProduit = 0;
+		idSelectedProduit = -1;
 		modelTableProduit.setRowCount(0);
 		Object[] row = null;
 		java.util.List<Produit> prods = produits.getListeProduits();
@@ -307,9 +435,12 @@ public class Interface extends JFrame implements ActionListener{
 		panelTableProduit.revalidate();
 	}
 	
+	/**
+	 * Permet de réafficher le tableau des fournisseurs
+	 */
 	public void resetTableFournisseur(){
 		tableFournisseur.clearSelection();
-		idSelectedFournisseur = 0;
+		idSelectedFournisseur = -1;
 		modelTableFournisseur.setRowCount(0);
 		Object[] row = null;
 		java.util.List<Fournisseur> fourniss = fournisseurs.getListeFournisseurs();
@@ -322,13 +453,37 @@ public class Interface extends JFrame implements ActionListener{
 		}
 		panelTableFournisseur.revalidate();
 	}
+	
+	/**
+	 * Permet de réafficher le tableau des commandes
+	 */
+	public void resetTableCommande(){
+		tableCommande.clearSelection();
+		idSelectedCommande = -1;
+		modelTableCommande.setRowCount(0);
+		Object[] row = null;
+		java.util.List<Commande> comm = commandes.getListeCommandes();
+		for ( Commande c : comm) {
+			if( c.getIdentifiant() >= nextIdCommande)
+				nextIdCommande = c.getIdentifiant() + 1;
+			String ligne = c.getIdentifiant() + "," + produits.getProduit( c.getIdVaccin()).getNom()  + "," + c.getDateHeure().toString() + "," + c.getNombre() + "," + produits.getProduit( c.getIdVaccin()).getPrix();
+			row = ligne.split(",");
+			modelTableCommande.addRow(row);
+		}
+		panelTableCommande.revalidate();
+	}
 
+	
+	/**
+	 * Permet de gérer l'appui des boutons.
+	 * Cette fonction est appelée quand l'interface détecte une action de l'utilisateur.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// Boutons produit
 		if( e.getSource() == ajouterProduit) {
 			if( nomProduitField.getText().equals("") || prixProduitField.getText().equals("") || nomFournisseurProduitField.getText().equals("") ) {
-				labelErreur.setText("Aucun champ ne doit être vide");
+				labelErreurProduit.setText("Aucun champ ne doit être vide");
 			}
 			else {
 				try {
@@ -344,20 +499,20 @@ public class Interface extends JFrame implements ActionListener{
 						i++;
 					}
 					if(idfournisseur == -1) {
-						labelErreur.setText( "Fournisseur non trouvé");
+						labelErreurProduit.setText( "Fournisseur non trouvé");
 					}else {
 						Produit produitAjoute = new Produit(nextIdProduit, nomProduitField.getText(), Float.parseFloat( prixProduitField.getText()), typeProduitField.getText(), 0, idfournisseur);
 						produits.ajouter(produitAjoute);
 						resetTableProduit();
-						labelErreur.setText("");
+						labelErreurProduit.setText("");
 					}
 				}catch(NumberFormatException exception) {
-					labelErreur.setText(" le prix doit être: nombre(+point si besoin) Ex: 1.2");
+					labelErreurProduit.setText(" le prix doit être: nombre(+point si besoin) Ex: 1.2");
 				}
 			}
 		}else if (e.getSource() == modifierProduit) {
 			if( idSelectedProduit == -1) {
-				labelErreur.setText("Veuillez d'abord selectionner un produit");
+				labelErreurProduit.setText("Veuillez d'abord selectionner un produit");
 			}else {
 				try {
 					Produit produitSelected = produits.getProduit(idSelectedProduit);
@@ -365,65 +520,136 @@ public class Interface extends JFrame implements ActionListener{
 					
 					//si aucun text field n'a été changé
 					if( nomProduitField.getText().equals( produitSelected.getNom()) && Float.parseFloat( prixProduitField.getText()) == produitSelected.getPrix() && produitSelected.getType().equals( typeProduitField.getText()) && fournisseurSelected.getNom().equals( nomFournisseurProduitField.getText())) {
-						labelErreur.setText("Veuillez modifier un des champs");
+						labelErreurProduit.setText("Veuillez modifier un des champs");
+					}else if( !fournisseurSelected.getNom().equals( nomFournisseurProduitField.getText())){
+						labelErreurProduit.setText("Supprimez le produit et recréez un nouveau produit avec ce fournisseur");
 					}else {
 						Produit produitModifie = new Produit( produitSelected.getIdentifiant(), nomProduitField.getText(), Float.parseFloat( prixProduitField.getText()), typeProduitField.getText(), produitSelected.getStock(), fournisseurSelected.getIdentifiant());
 						produits.replaceProduit(produitModifie);
 						resetTableProduit();
-						labelErreur.setText("");
+						labelErreurProduit.setText("");
 					}
 				}catch(NumberFormatException exception) {
-					labelErreur.setText("le prix doit être: nombre(+point si besoin) Ex: 1.2");
+					labelErreurProduit.setText("le prix doit être: nombre(+point si besoin) Ex: 1.2");
 				}
 			}
 		}else if (e.getSource() == supprimerProduit) {
 			if( idSelectedProduit == -1) {
-				labelErreur.setText("Veuillez d'abord selectionner un produit");
+				labelErreurProduit.setText("Veuillez d'abord selectionner un produit");
 			}else {
 				produits.deleteProduit(idSelectedProduit);
 				resetTableProduit();
-				labelErreur.setText("");
+				labelErreurProduit.setText("");
 			}
 		}
 		
 		//Boutons Fournisseur
 		else if( e.getSource() == ajouterFournisseur) {
 			if( nomFournisseurField.getText().equals("") || adresseField.getText().equals("") || codePostalField.getText().equals("") ||  villeField.getText().equals("") || telField.getText().equals("")) {
-				labelErreur.setText("Aucun champ ne doit être vide");
+				labelErreurFournisseur.setText("Aucun champ ne doit être vide");
 			}
 			else {
 				Fournisseur fournisseurAjoute = new Fournisseur( nextIdFournisseur, nomFournisseurField.getText(), "France", adresseField.getText(), villeField.getText(), codePostalField.getText(), telField.getText());
 				fournisseurs.ajouter(fournisseurAjoute);
 				resetTableFournisseur();
-				labelErreur.setText("");
+				labelErreurFournisseur.setText("");
 			}
 		}else if (e.getSource() == modifierFournisseur) {
 			if( idSelectedFournisseur == -1) {
-				labelErreur.setText("Veuillez d'abord selectionner un fournisseur");
+				labelErreurFournisseur.setText("Veuillez d'abord selectionner un fournisseur");
 			}else {
 				Fournisseur fournisseurSelected = fournisseurs.getFournisseur(idSelectedFournisseur);
 				
 				//si aucun text field n'a été changé
 				if( nomFournisseurField.getText().equals( fournisseurSelected.getNom()) && adresseField.getText().equals( fournisseurSelected.getAdresse()) && codePostalField.getText().equals( fournisseurSelected.getCode_postal()) && villeField.getText().equals( fournisseurSelected.getVille()) && telField.getText().equals( fournisseurSelected.getTelephone())) {
-					labelErreur.setText("Veuillez modifier un des champs");
+					labelErreurFournisseur.setText("Veuillez modifier un des champs");
 				}else {
 					Fournisseur fournisseurAjoute = new Fournisseur( idSelectedFournisseur, nomFournisseurField.getText(), "France", adresseField.getText(), villeField.getText(), codePostalField.getText(), telField.getText());
 					fournisseurs.replaceFournisseur(fournisseurAjoute);
 					resetTableFournisseur();
-					labelErreur.setText("");
+					labelErreurFournisseur.setText("");
 				}
 			}
 		}else if (e.getSource() == supprimerFournisseur) {
 			if( idSelectedFournisseur == -1) {
-				labelErreur.setText("Veuillez d'abord selectionner un produit");
+				labelErreurFournisseur.setText("Veuillez d'abord selectionner un produit");
 			}else {
 				fournisseurs.deleteFournisseur(idSelectedFournisseur);
 				resetTableFournisseur();
-				labelErreur.setText("");
+				labelErreurFournisseur.setText("");
+			}
+		}
+		
+		// Boutons commande
+		if( e.getSource() == ajouterCommande) {
+			if( nomProduitCommandeField.getText().equals("") || quantiteField.getText().equals("") ) {
+				labelErreurFournisseur.setText("Aucun champ ne doit être vide");
+			}
+			else {
+				try {
+					int idProduit = -1, i = 0;
+					boolean test = false;
+					while(!test) {
+						if( produits.getListeProduits().get(i).getNom().equals( nomProduitCommandeField.getText())) {
+							idProduit = produits.getListeProduits().get(i).getIdentifiant();
+							test = true;
+						}else if( i == produits.getListeProduits().size()-1) {
+							test = true;
+						}
+						i++;
+					}
+					if(idProduit == -1) {
+						labelErreurFournisseur.setText( "Produit non trouvé");
+					}else {
+						Commande commandeAjoute = new Commande( nextIdCommande, new Date( System.currentTimeMillis()), Integer.valueOf( quantiteField.getText()), idProduit);
+						commandes.ajouter(commandeAjoute);
+						resetTableCommande();
+						labelErreurFournisseur.setText("");
+					}
+				}catch(NumberFormatException exception) {
+					labelErreurFournisseur.setText("la quantite doit être un nombre sans virgule");
+				}
+			}
+		}else if (e.getSource() == modifierCommande) {
+			if( idSelectedCommande == -1 ) {
+				labelErreurCommande.setText("Veuillez d'abord selectionner une commande");
+			}else {
+				try {
+					Commande commandeSelected = commandes.getCommande( idSelectedCommande);
+					Produit produitSelected = produits.getProduit( commandeSelected.getIdVaccin());
+					
+					//si aucun text field n'a été changé
+					if( nomProduitCommandeField.getText().equals( produitSelected.getNom()) && Integer.valueOf( prixProduitField.getText()) == commandeSelected.getNombre() ) {
+						labelErreurCommande.setText("Veuillez modifier un des champs");
+					}else if( !produitSelected.getNom().equals( nomProduitCommandeField.getText())){
+						labelErreurCommande.setText("Supprimez la commande et recréez une nouvelle commande avec ce produit");
+					}else {
+						Commande commandeModifie = new Commande( idSelectedCommande, commandeSelected.getDateHeure(), Integer.valueOf( quantiteField.getText()), produitSelected.getIdentifiant());
+						commandes.replaceCommande(commandeModifie);
+						resetTableCommande();
+						resetTableProduit();
+						labelErreurCommande.setText("");
+					}
+				}catch(NumberFormatException exception) {
+					labelErreurCommande.setText("la quantite doit être un nombre sans virgule");
+				}
+			}
+		}else if (e.getSource() == supprimerCommande) {
+			if( idSelectedCommande == -1) {
+				labelErreurCommande.setText("Veuillez d'abord selectionner une commande");
+			}else {
+				commandes.deleteCommande(idSelectedCommande);
+				resetTableCommande();
+				labelErreurCommande.setText("");
 			}
 		}
 	}
 	
+	/**
+	 * Fonction main. 
+	 * Initialise l'interface.
+	 * @param args
+	 */
 	public static void main(String[] args) { 
 		new Interface(); 
 	}
